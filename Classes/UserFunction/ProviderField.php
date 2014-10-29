@@ -58,13 +58,14 @@ class ProviderField {
 	 */
 	public function createVariantsField(array $parameters) {
 		$extensionKeys = $this->provider->getVariantExtensionKeysForContentType($parameters['row']['CType']);
+		$variantNames = $this->getVariantsLabel($extensionKeys);
 		$defaults = $this->provider->getDefaults();
 		$preSelected = $parameters['row']['content_variant'];
 		if (CoreContentProvider::MODE_PRESELECT === $defaults['mode'] && TRUE === empty($preSelected)) {
 			$preSelected = $defaults['variant'];
 		}
 		if (TRUE === is_array($extensionKeys) && 0 < count($extensionKeys)) {
-			$options = array_combine($extensionKeys, $extensionKeys);
+			$options = array_combine($extensionKeys, $variantNames);
 		} else {
 			$options = array();
 		}
@@ -78,7 +79,7 @@ class ProviderField {
 	 * @return string
 	 */
 	protected function renderSelectField($parameters, $options, $selectedValue) {
-		$hasSelectedValue = (TRUE === empty($selectedValue) || TRUE === in_array($selectedValue, $options));
+		$hasSelectedValue = (TRUE === empty($selectedValue) || TRUE === array_key_exists($selectedValue, $options));
 		$selected = (TRUE === empty($selectedValue) ? ' selected="selected"' : NULL);
 		$html = array(
 			'<select class="select" name="' . $parameters['itemFormElName'] . '" onchange="' . $parameters['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . ';' . $parameters['fieldChangeFunc']['alert'] . '">',
@@ -126,6 +127,19 @@ class ProviderField {
 	 */
 	protected function getNoneFoundLabel() {
 		return LocalizationUtility::translate('tt_content.noneFoundLabel', 'FluidcontentCore');
+	}
+
+	/**
+	 * @param array $extensionKeys
+	 * @return array
+	 */
+	protected function getVariantsLabel($extensionKeys) {
+		$variantNames = array();
+		foreach ($extensionKeys as $extensionKey) {
+			$name = LocalizationUtility::translate('fluidcontent_core.variantLabel', $extensionKey);
+			$variantNames[] = (FALSE == empty($name)) ? $name : $extensionKey;
+		}
+		return $variantNames;
 	}
 
 }

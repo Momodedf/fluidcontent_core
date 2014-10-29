@@ -97,6 +97,8 @@ You cannot choose custom template file names for your variants, nor a custom loc
 
 > Note: the template files **must exist or your variant will be ignored!**
 
+You can choose a custom variant name for you extensionkey by adding the label `fluidcontent_core.variantLabel` in your extension language file.
+
 ### Concept: Versions
 
 > Use case: you already provide a "variant" of an element but your should now to provide more "versions" of the element, with one of two purposes: 1) making it possible to test new element designs in a single content element and/or 2) making logical versions of your "variant" that can be selected only when your "variant" type is selected.
